@@ -1,11 +1,21 @@
-import express from 'express'
-#changes 
+const express = require('express')
 const app = express()
 
-app.get('/', (req, res) => {
-  res.send('Hello World')
+app.use(express.json())
+
+app.use('/api/users', require('./routes/cordova_users.routes'))
+app.use('/api/products', require('./routes/cordova_products.routes'))
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: {
+      code: "NOT_FOUND",
+      message: "The requested endpoint does not exist on this server."
+    }
+  })
 })
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000')
+app.listen(1234, () => {
+  console.log('Server is running on http://localhost:1234')
 })
